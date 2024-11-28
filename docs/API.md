@@ -22,7 +22,13 @@
 * [`showController()`](#showcontroller)
 * [`isControllerIsFullyVisible()`](#iscontrollerisfullyvisible)
 * [`exitPlayer()`](#exitplayer)
+* [`addListener('jeepCapVideoPlayerReady', ...)`](#addlistenerjeepcapvideoplayerready-)
+* [`addListener('jeepCapVideoPlayerPlay', ...)`](#addlistenerjeepcapvideoplayerplay-)
+* [`addListener('jeepCapVideoPlayerPause', ...)`](#addlistenerjeepcapvideoplayerpause-)
+* [`addListener('jeepCapVideoPlayerEnded', ...)`](#addlistenerjeepcapvideoplayerended-)
+* [`addListener('jeepCapVideoPlayerExit', ...)`](#addlistenerjeepcapvideoplayerexit-)
 * [Interfaces](#interfaces)
+* [Type Aliases](#type-aliases)
 
 </docgen-index>
 * [Listeners](#listeners)
@@ -469,6 +475,90 @@ Exit player
 --------------------
 
 
+### addListener('jeepCapVideoPlayerReady', ...)
+
+```typescript
+addListener(eventName: 'jeepCapVideoPlayerReady', listenerFunc: JeepCapVideoPlayerReady) => Promise<PluginListenerHandle>
+```
+
+Listen for changes in the App's active state (whether the app is in the foreground or background)
+
+| Param              | Type                                                                        |
+| ------------------ | --------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'jeepCapVideoPlayerReady'</code>                                      |
+| **`listenerFunc`** | <code><a href="#jeepcapvideoplayerready">JeepCapVideoPlayerReady</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 1.0.0
+
+--------------------
+
+
+### addListener('jeepCapVideoPlayerPlay', ...)
+
+```typescript
+addListener(eventName: 'jeepCapVideoPlayerPlay', listenerFunc: JeepCapVideoPlayerPlay) => Promise<PluginListenerHandle>
+```
+
+| Param              | Type                                                                      |
+| ------------------ | ------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'jeepCapVideoPlayerPlay'</code>                                     |
+| **`listenerFunc`** | <code><a href="#jeepcapvideoplayerplay">JeepCapVideoPlayerPlay</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+--------------------
+
+
+### addListener('jeepCapVideoPlayerPause', ...)
+
+```typescript
+addListener(eventName: 'jeepCapVideoPlayerPause', listenerFunc: JeepCapVideoPlayerPause) => Promise<PluginListenerHandle>
+```
+
+| Param              | Type                                                                        |
+| ------------------ | --------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'jeepCapVideoPlayerPause'</code>                                      |
+| **`listenerFunc`** | <code><a href="#jeepcapvideoplayerpause">JeepCapVideoPlayerPause</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+--------------------
+
+
+### addListener('jeepCapVideoPlayerEnded', ...)
+
+```typescript
+addListener(eventName: 'jeepCapVideoPlayerEnded', listenerFunc: JeepCapVideoPlayerEnded) => Promise<PluginListenerHandle>
+```
+
+| Param              | Type                                                                        |
+| ------------------ | --------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'jeepCapVideoPlayerEnded'</code>                                      |
+| **`listenerFunc`** | <code><a href="#jeepcapvideoplayerended">JeepCapVideoPlayerEnded</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+--------------------
+
+
+### addListener('jeepCapVideoPlayerExit', ...)
+
+```typescript
+addListener(eventName: 'jeepCapVideoPlayerExit', listenerFunc: JeepCapVideoPlayerExit) => Promise<PluginListenerHandle>
+```
+
+| Param              | Type                                                                      |
+| ------------------ | ------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'jeepCapVideoPlayerExit'</code>                                     |
+| **`listenerFunc`** | <code><a href="#jeepcapvideoplayerexit">JeepCapVideoPlayerExit</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+--------------------
+
+
 ### Interfaces
 
 
@@ -563,6 +653,57 @@ Exit player
 | -------------- | ------------------- | -------------------------------------- |
 | **`playerId`** | <code>string</code> | Id of DIV Element parent of the player |
 | **`rate`**     | <code>number</code> | Rate value                             |
+
+
+#### PluginListenerHandle
+
+| Prop         | Type                                      |
+| ------------ | ----------------------------------------- |
+| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
+
+
+#### capVideoListener
+
+| Prop              | Type                | Description                                |
+| ----------------- | ------------------- | ------------------------------------------ |
+| **`playerId`**    | <code>string</code> | Id of DIV Element parent of the player     |
+| **`currentTime`** | <code>number</code> | Video current time when listener trigerred |
+
+
+#### capExitListener
+
+| Prop              | Type                 | Description                                |
+| ----------------- | -------------------- | ------------------------------------------ |
+| **`dismiss`**     | <code>boolean</code> | Dismiss value true or false                |
+| **`currentTime`** | <code>number</code>  | Video current time when listener trigerred |
+
+
+### Type Aliases
+
+
+#### JeepCapVideoPlayerReady
+
+<code>(event: <a href="#capvideolistener">capVideoListener</a>): void</code>
+
+
+#### JeepCapVideoPlayerPlay
+
+<code>(event: <a href="#capvideolistener">capVideoListener</a>): void</code>
+
+
+#### JeepCapVideoPlayerPause
+
+<code>(event: <a href="#capvideolistener">capVideoListener</a>): void</code>
+
+
+#### JeepCapVideoPlayerEnded
+
+<code>(event: <a href="#capvideolistener">capVideoListener</a>): void</code>
+
+
+#### JeepCapVideoPlayerExit
+
+<code>(event: <a href="#capexitlistener">capExitListener</a>): void</code>
 
 </docgen-api>
 

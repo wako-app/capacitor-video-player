@@ -1,3 +1,5 @@
+import { PluginListenerHandle } from "@capacitor/core";
+
 export interface CapacitorVideoPlayerPlugin {
   /**
    * Echo
@@ -91,7 +93,45 @@ export interface CapacitorVideoPlayerPlugin {
    *
    */
   exitPlayer(): Promise<capVideoPlayerResult>;
+
+  /**
+   * Listen for changes in the App's active state (whether the app is in the foreground or background)
+   *
+   * @since 1.0.0
+   */
+  addListener(
+    eventName: 'jeepCapVideoPlayerReady',
+    listenerFunc: JeepCapVideoPlayerReady,
+  ): Promise<PluginListenerHandle>;
+
+  addListener(
+    eventName: 'jeepCapVideoPlayerPlay',
+    listenerFunc: JeepCapVideoPlayerPlay,
+  ): Promise<PluginListenerHandle>;
+
+  addListener(
+    eventName: 'jeepCapVideoPlayerPause',
+    listenerFunc: JeepCapVideoPlayerPause,
+  ): Promise<PluginListenerHandle>;
+
+  addListener(
+    eventName: 'jeepCapVideoPlayerEnded',
+    listenerFunc: JeepCapVideoPlayerEnded,
+  ): Promise<PluginListenerHandle>;
+
+  addListener(
+    eventName: 'jeepCapVideoPlayerExit',
+    listenerFunc: JeepCapVideoPlayerExit,
+  ): Promise<PluginListenerHandle>;
+
 }
+
+export type JeepCapVideoPlayerReady = (event: capVideoListener) => void;
+export type JeepCapVideoPlayerPlay = (event: capVideoListener) => void;
+export type JeepCapVideoPlayerPause = (event: capVideoListener) => void;
+export type JeepCapVideoPlayerEnded = (event: capVideoListener) => void;
+export type JeepCapVideoPlayerExit = (event: capExitListener) => void;
+
 export interface capEchoOptions {
   /**
    *  String to be echoed
