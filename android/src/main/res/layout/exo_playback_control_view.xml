@@ -16,7 +16,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="@color/exo_black_opacity_60"
+  android:background="@color/black_80"
   android:fitsSystemWindows="true">
 
   <!-- 0dp dimensions are used to prevent this view from influencing the size of
@@ -65,7 +65,7 @@
             android:id="@+id/exo_close"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:background="@color/button_hover"
+            android:background="?actionBarItemBackground"
             android:ellipsize="end"
             android:scaleX="1.3"
             android:scaleY="1.3"
@@ -112,14 +112,14 @@
           android:layout_width="48dp"
           android:layout_height="48dp"
           android:mediaRouteTypes="user"
-           android:background="@color/button_hover"
+          android:background="?actionBarItemBackground"
           android:visibility="gone"/>
 
         <ImageButton
           android:id="@+id/exo_pip"
           android:layout_width="48dp"
           android:layout_height="48dp"
-           android:background="@color/button_hover"
+          android:background="?actionBarItemBackground"
           android:src="@drawable/ic_pip_white"
           android:visibility="gone"
           android:contentDescription="Picture in picture button"/>
@@ -128,7 +128,7 @@
           android:id="@+id/exo_resize"
           android:layout_width="48dp"
           android:layout_height="48dp"
-           android:background="@color/button_hover"
+          android:background="?actionBarItemBackground"
           android:src="@drawable/ic_expand"
           android:visibility="gone"
           android:contentDescription="visible"/>
@@ -145,7 +145,7 @@
     android:layout_marginTop="@dimen/exo_styled_bottom_bar_margin_top"
     android:layout_gravity="bottom"
     android:layoutDirection="ltr"
-      android:background="@color/button_hover"
+    android:background="?actionBarItemBackground"
     app:layout_constraintBottom_toBottomOf="parent">
 
     <LinearLayout android:id="@id/exo_time"
@@ -187,31 +187,31 @@
 
       <ImageButton android:id="@id/exo_vr"
         style="@style/ExoStyledControls.Button.Bottom.VR"
-          android:background="@color/button_hover"/>
+             android:background="?actionBarItemBackground"/>
 
       <ImageButton android:id="@id/exo_shuffle"
         style="@style/ExoStyledControls.Button.Bottom.Shuffle"
-          android:background="@color/button_hover"/>
+             android:background="?actionBarItemBackground"/>
 
       <ImageButton android:id="@id/exo_repeat_toggle"
         style="@style/ExoStyledControls.Button.Bottom.RepeatToggle"
-          android:background="@color/button_hover"/>
+             android:background="?actionBarItemBackground"/>
 
       <ImageButton android:id="@id/exo_subtitle"
         style="@style/ExoStyledControls.Button.Bottom.CC"
-          android:background="@color/button_hover"/>
+             android:background="?actionBarItemBackground"/>
 
       <ImageButton android:id="@id/exo_settings"
         style="@style/ExoStyledControls.Button.Bottom.Settings"
-          android:background="@color/button_hover"/>
+             android:background="?actionBarItemBackground"/>
 
       <ImageButton android:id="@id/exo_fullscreen"
         style="@style/ExoStyledControls.Button.Bottom.FullScreen"
-          android:background="@color/button_hover"/>
+             android:background="?actionBarItemBackground"/>
 
       <ImageButton android:id="@id/exo_overflow_show"
         style="@style/ExoStyledControls.Button.Bottom.OverflowShow"
-          android:background="@color/button_hover"/>
+             android:background="?actionBarItemBackground"/>
 
     </LinearLayout>
 
@@ -278,33 +278,20 @@
 
     <ImageButton android:id="@id/exo_prev"
       style="@style/ExoStyledControls.Button.Center.Previous"
-        android:background="@color/button_hover"/>
-
-    <ImageButton
-        android:id="@+id/exo_rew"
-        style="@style/ExoMediaButton.Rewind"
-        android:src="@drawable/media3_icon_skip_back_10"
-        android:background="@color/button_hover"
-        android:visibility="visible" />
-
-    <ImageButton
-        android:id="@id/exo_play_pause"
-        style="@style/ExoStyledControls.Button.Center.PlayPause"
-        android:background="@color/button_hover"
+        android:background="?actionBarItemBackground"
         />
 
-    <ImageButton
-        android:id="@+id/exo_ffwd"
-        style="@style/ExoMediaButton.FastForward"
-        android:src="@drawable/ic_exo_icon_fastforward"
-        android:background="@color/button_hover"
-        android:visibility="visible"
-       />
+    <include layout="@layout/exo_player_control_rewind_button" />
+
+    <ImageButton android:id="@+id/exo_play_pause"
+        style="@style/ExoStyledControls.Button.Center.PlayPause"/>
+
+    <include layout="@layout/exo_player_control_ffwd_button" />
 
     <ImageButton android:id="@id/exo_next"
       style="@style/ExoStyledControls.Button.Center.Next"
       tools:ignore="ContentDescription"
-        android:background="@color/button_hover"
+           android:background="?actionBarItemBackground"
         />
 
   </LinearLayout>
