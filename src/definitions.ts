@@ -1,4 +1,4 @@
-import { PluginListenerHandle } from "@capacitor/core";
+import { PluginListenerHandle } from '@capacitor/core';
 
 export interface CapacitorVideoPlayerPlugin {
   /**
@@ -124,6 +124,10 @@ export interface CapacitorVideoPlayerPlugin {
     listenerFunc: JeepCapVideoPlayerExit,
   ): Promise<PluginListenerHandle>;
 
+  addListener(
+    eventName: 'jeepCapVideoPlayerTracksChanged',
+    listenerFunc: JeepCapVideoPlayerTracksChanged,
+  ): Promise<PluginListenerHandle>;
 }
 
 export type JeepCapVideoPlayerReady = (event: capVideoListener) => void;
@@ -131,6 +135,9 @@ export type JeepCapVideoPlayerPlay = (event: capVideoListener) => void;
 export type JeepCapVideoPlayerPause = (event: capVideoListener) => void;
 export type JeepCapVideoPlayerEnded = (event: capVideoListener) => void;
 export type JeepCapVideoPlayerExit = (event: capExitListener) => void;
+export type JeepCapVideoPlayerTracksChanged = (
+  event: TracksChangedInfo,
+) => void;
 
 export interface capEchoOptions {
   /**
@@ -155,10 +162,9 @@ export interface capVideoPlayerOptions {
    */
   subtitle?: string;
   /**
-   * The language of subtitle
-   * see https://github.com/libyal/libfwnt/wiki/Language-Code-identifiers
+   * The default audio language to select, if not found will select the subtitle with the same language if available
    */
-  language?: string;
+  preferredLanguage?: string;
   /**
    * SubTitle Options
    */
@@ -249,6 +255,25 @@ export interface capVideoPlayerOptions {
    * default: ""
    */
   artwork?: string;
+  /**
+   * ID of the subtitle track to select
+   */
+  subtitleTrackId?: string;
+
+  /**
+   * Locale of the subtitle track to select (if subtitleTrackId not found)
+   */
+  subtitleLocale?: string;
+
+  /**
+   * ID of the audio track to select
+   */
+  audioTrackId?: string;
+
+  /**
+   * Locale of the audio track to select (if audioTrackId not found)
+   */
+  audioLocale?: string;
 }
 export interface capVideoPlayerIdOptions {
   /**
@@ -347,4 +372,22 @@ export interface SubTitleOptions {
    * Font Size in pixels (default 16)
    */
   fontSize?: number;
+}
+
+export interface TrackInfo {
+  id: string;
+  language: string;
+  label: string;
+  codecs?: string;
+  bitrate?: number;
+  channelCount?: number;
+  sampleRate?: number;
+  containerMimeType?: string;
+  sampleMimeType?: string;
+}
+
+export interface TracksChangedInfo {
+  fromPlayerId: string;
+  audioTrack?: TrackInfo;
+  subtitleTrack?: TrackInfo;
 }

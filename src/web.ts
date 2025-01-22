@@ -615,8 +615,10 @@ export class CapacitorVideoPlayerWeb
         : url
       : (null as any);
     if (videoURL === null) return Promise.resolve(false);
-    this.videoContainer =
-      await this._getContainerElement(playerId, componentTag);
+    this.videoContainer = await this._getContainerElement(
+      playerId,
+      componentTag,
+    );
     if (this.videoContainer === null)
       return Promise.resolve({
         method: 'initPlayer',
@@ -713,40 +715,97 @@ export class CapacitorVideoPlayerWeb
   private handlePlayerReady(data: any) {
     this.notifyListeners('jeepCapVideoPlayerReady', data);
   }
+  private handlePlayerTracksChanged(data: any) {
+    this.notifyListeners('jeepCapVideoPlayerTracksChanged', data);
+  }
 
   private addListeners() {
-    document.addEventListener('videoPlayerPlay', (ev: any) => {
-      this.handlePlayerPlay(ev.detail);
-    },false);
-    document.addEventListener('videoPlayerPause', (ev: any) => {
-      this.handlePlayerPause(ev.detail);
-    },false);
-    document.addEventListener('videoPlayerEnded', (ev: any) => {
-      this.handlePlayerEnded(ev.detail);
-    },false);
-    document.addEventListener('videoPlayerReady', (ev: any) => {
-      this.handlePlayerReady(ev.detail);
-    },false);
-    document.addEventListener('videoPlayerExit', () => {
-      this.handlePlayerExit();
-    },false);
+    document.addEventListener(
+      'videoPlayerPlay',
+      (ev: any) => {
+        this.handlePlayerPlay(ev.detail);
+      },
+      false,
+    );
+    document.addEventListener(
+      'videoPlayerPause',
+      (ev: any) => {
+        this.handlePlayerPause(ev.detail);
+      },
+      false,
+    );
+    document.addEventListener(
+      'videoPlayerEnded',
+      (ev: any) => {
+        this.handlePlayerEnded(ev.detail);
+      },
+      false,
+    );
+    document.addEventListener(
+      'videoPlayerReady',
+      (ev: any) => {
+        this.handlePlayerReady(ev.detail);
+      },
+      false,
+    );
+    document.addEventListener(
+      'videoPlayerExit',
+      () => {
+        this.handlePlayerExit();
+      },
+      false,
+    );
+    document.addEventListener(
+      'videoPlayerTracksChanged',
+      (ev: any) => {
+        this.handlePlayerTracksChanged(ev.detail);
+      },
+      false,
+    );
   }
 
   private removeListeners() {
-    document.removeEventListener('videoPlayerPlay', (ev: any) => {
-      this.handlePlayerPlay(ev.detail);
-    },false);
-    document.removeEventListener('videoPlayerPause', (ev: any) => {
-      this.handlePlayerPause(ev.detail);
-    },false);
-    document.removeEventListener('videoPlayerEnded', (ev: any) => {
-      this.handlePlayerEnded(ev.detail);
-    },false);
-    document.removeEventListener('videoPlayerReady', (ev: any) => {
-      this.handlePlayerReady(ev.detail);
-    },false);
-    document.removeEventListener('videoPlayerExit', () => {
-      this.handlePlayerExit();
-    },false);
+    document.removeEventListener(
+      'videoPlayerPlay',
+      (ev: any) => {
+        this.handlePlayerPlay(ev.detail);
+      },
+      false,
+    );
+    document.removeEventListener(
+      'videoPlayerPause',
+      (ev: any) => {
+        this.handlePlayerPause(ev.detail);
+      },
+      false,
+    );
+    document.removeEventListener(
+      'videoPlayerEnded',
+      (ev: any) => {
+        this.handlePlayerEnded(ev.detail);
+      },
+      false,
+    );
+    document.removeEventListener(
+      'videoPlayerReady',
+      (ev: any) => {
+        this.handlePlayerReady(ev.detail);
+      },
+      false,
+    );
+    document.removeEventListener(
+      'videoPlayerExit',
+      () => {
+        this.handlePlayerExit();
+      },
+      false,
+    );
+    document.removeEventListener(
+      'videoPlayerTracksChanged',
+      (ev: any) => {
+        this.handlePlayerTracksChanged(ev.detail);
+      },
+      false,
+    );
   }
 }

@@ -118,6 +118,7 @@ export declare class CapacitorVideoPlayerWeb extends WebPlugin implements Capaci
     private handlePlayerEnded;
     private handlePlayerExit;
     private handlePlayerReady;
+    private handlePlayerTracksChanged;
     private addListeners;
     private removeListeners;
 }

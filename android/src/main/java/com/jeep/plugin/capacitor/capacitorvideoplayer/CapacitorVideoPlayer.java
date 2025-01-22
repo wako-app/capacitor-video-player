@@ -6,11 +6,7 @@ import com.jeep.plugin.capacitor.capacitorvideoplayer.PickerVideo.PickerVideoFra
 
 public class CapacitorVideoPlayer {
 
-    private final Context context;
-
-    CapacitorVideoPlayer(Context context) {
-        this.context = context;
-    }
+    CapacitorVideoPlayer(Context context) {}
 
     public String echo(String value) {
         return value;
@@ -26,7 +22,7 @@ public class CapacitorVideoPlayer {
         Boolean showControls,
         String displayMode,
         String subTitle,
-        String language,
+        String preferredLanguage,
         JSObject subTitleOptions,
         JSObject headers,
         String title,
@@ -50,7 +46,7 @@ public class CapacitorVideoPlayer {
         fsFragment.showControls = showControls;
         fsFragment.displayMode = displayMode;
         fsFragment.subTitle = subTitle;
-        fsFragment.language = language;
+        fsFragment.preferredLanguage = preferredLanguage;
         fsFragment.subTitleOptions = subTitleOptions;
         fsFragment.headers = headers;
         fsFragment.title = title;

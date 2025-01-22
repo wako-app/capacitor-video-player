@@ -32,10 +32,8 @@ import java.util.Map;
 @CapacitorPlugin(
     name = "CapacitorVideoPlayer",
     permissions = {
-      @Permission(alias = "mediaVideo",
-                  strings = { Manifest.permission.READ_MEDIA_VIDEO }) ,
-      @Permission(alias = "publicStorage",
-                  strings = { Manifest.permission.READ_EXTERNAL_STORAGE})
+        @Permission(alias = "mediaVideo", strings = { Manifest.permission.READ_MEDIA_VIDEO }),
+        @Permission(alias = "publicStorage", strings = { Manifest.permission.READ_EXTERNAL_STORAGE })
     }
 )
 public class CapacitorVideoPlayerPlugin extends Plugin {
@@ -79,34 +77,31 @@ public class CapacitorVideoPlayerPlugin extends Plugin {
     private String url;
     private String playerId;
     private String subtitle = "";
-    private String language = "";
+    private String preferredLanguage = "";
     private JSObject subTitleOptions;
     private final JSObject ret = new JSObject();
 
-
-
-  @Override
-  public void load() {
-      // Get context
-      this.context = getContext();
-      implementation = new CapacitorVideoPlayer(this.context);
-      this.filesUtils = new FilesUtils(this.context);
-      this.fragmentUtils = new FragmentUtils(getBridge());
-  }
-
-  @PermissionCallback
-  private void permissionsCallback(PluginCall call) {
-    if (!isPermissionsGranted()) {
-      call.reject(PERMISSION_DENIED_ERROR);
-      return;
+    @Override
+    public void load() {
+        // Get context
+        this.context = getContext();
+        implementation = new CapacitorVideoPlayer(this.context);
+        this.filesUtils = new FilesUtils(this.context);
+        this.fragmentUtils = new FragmentUtils(getBridge());
     }
-    switch (call.getMethodName()) {
-      case "initPlayer" -> _initPlayer(call);
+
+    @PermissionCallback
+    private void permissionsCallback(PluginCall call) {
+        if (!isPermissionsGranted()) {
+            call.reject(PERMISSION_DENIED_ERROR);
+            return;
+        }
+        switch (call.getMethodName()) {
+            case "initPlayer" -> _initPlayer(call);
+        }
     }
-  }
 
-
-  @PluginMethod
+    @PluginMethod
     public void echo(PluginCall call) {
         String value = call.getString("value");
 
@@ -116,11 +111,11 @@ public class CapacitorVideoPlayerPlugin extends Plugin {
     }
 
     private boolean isPermissionsGranted() {
-      String permissionSet = PUBLICSTORAGE;
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        permissionSet = MEDIAVIDEO;
-      }
-      return getPermissionState(permissionSet) == PermissionState.GRANTED;
+        String permissionSet = PUBLICSTORAGE;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            permissionSet = MEDIAVIDEO;
+        }
+        return getPermissionState(permissionSet) == PermissionState.GRANTED;
     }
 
     @PluginMethod
@@ -192,8 +187,8 @@ public class CapacitorVideoPlayerPlugin extends Plugin {
             if (call.getData().has("subtitle")) {
                 subtitle = call.getString("subtitle");
             }
-            if (call.getData().has("language")) {
-                language = call.getString("language");
+            if (call.getData().has("preferredLanguage")) {
+                preferredLanguage = call.getString("preferredLanguage");
             }
             subTitleOptions = new JSObject();
             if (call.getData().has("subtitleOptions")) {
@@ -233,7 +228,7 @@ public class CapacitorVideoPlayerPlugin extends Plugin {
             AddObserversToNotificationCenter();
             Log.v(TAG, "display url: " + url);
             Log.v(TAG, "display subtitle: " + subtitle);
-            Log.v(TAG, "display language: " + language);
+            Log.v(TAG, "display preferredLanguage: " + preferredLanguage);
             Log.v(TAG, "headers: " + headers);
             Log.v(TAG, "title: " + title);
             Log.v(TAG, "smallTitle: " + smallTitle);
@@ -243,17 +238,17 @@ public class CapacitorVideoPlayerPlugin extends Plugin {
             if (url.equals("internal") || url.contains("DCIM") || url.contains("Documents")) {
                 // Check for permissions to access media video files
                 if (isPermissionsGranted()) {
-                  _initPlayer(call);
+                    _initPlayer(call);
                 } else {
-                  this.bridge.saveCall(call);
-                  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    requestPermissionForAlias(MEDIAVIDEO, call, "permissionsCallback");
-                  } else {
-                    requestPermissionForAlias(PUBLICSTORAGE, call, "permissionsCallback");
-                  }
+                    this.bridge.saveCall(call);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        requestPermissionForAlias(MEDIAVIDEO, call, "permissionsCallback");
+                    } else {
+                        requestPermissionForAlias(PUBLICSTORAGE, call, "permissionsCallback");
+                    }
                 }
             } else {
-              _initPlayer(call);
+                _initPlayer(call);
             }
         } else if ("embedded".equals(mode)) {
             ret.put("message", "Embedded Mode not implemented");
@@ -907,57 +902,58 @@ public class CapacitorVideoPlayerPlugin extends Plugin {
     private void _initPlayer(PluginCall call) {
         // Got Permissions ;
         if (url.equals("internal")) {
-          createPickerVideoFragment(call);
+            createPickerVideoFragment(call);
         } else {
-          // get the videoPath
-          videoPath = filesUtils.getFilePath(url);
-          // get the subTitlePath if any
-          if (subtitle != null && subtitle.length() > 0) {
-            subTitlePath = filesUtils.getFilePath(subtitle);
-          } else {
-            subTitlePath = null;
-          }
-          Log.v(TAG, "*** calculated videoPath: " + videoPath);
-          Log.v(TAG, "*** calculated subTitlePath: " + subTitlePath);
-          if (videoPath != null) {
-            createFullScreenFragment(
-              call,
-              videoPath,
-              videoRate,
-              exitOnEnd,
-              loopOnEnd,
-              pipEnabled,
-              bkModeEnabled,
-              showControls,
-              displayMode,
-              subTitlePath,
-              language,
-              subTitleOptions,
-              headers,
-              title,
-              smallTitle,
-              accentColor,
-              chromecast,
-              artwork,
-              isTV,
-              playerId,
-              false,
-              null
-            );
-          } else {
-            Map<String, Object> info = new HashMap<String, Object>() {
-              {
-                put("dismiss", "1");
-                put("currentTime", "0");
-              }
-            };
-            NotificationCenter.defaultCenter().postNotification("playerFullscreenDismiss", info);
-            ret.put("message", "initPlayer command failed: Video file not found");
-            call.resolve(ret);
-            return;
-          }
+            // get the videoPath
+            videoPath = filesUtils.getFilePath(url);
+            // get the subTitlePath if any
+            if (subtitle != null && subtitle.length() > 0) {
+                subTitlePath = filesUtils.getFilePath(subtitle);
+            } else {
+                subTitlePath = null;
+            }
+            Log.v(TAG, "*** calculated videoPath: " + videoPath);
+            Log.v(TAG, "*** calculated subTitlePath: " + subTitlePath);
+            if (videoPath != null) {
+                createFullScreenFragment(
+                    call,
+                    videoPath,
+                    videoRate,
+                    exitOnEnd,
+                    loopOnEnd,
+                    pipEnabled,
+                    bkModeEnabled,
+                    showControls,
+                    displayMode,
+                    subTitlePath,
+                    preferredLanguage,
+                    subTitleOptions,
+                    headers,
+                    title,
+                    smallTitle,
+                    accentColor,
+                    chromecast,
+                    artwork,
+                    isTV,
+                    playerId,
+                    false,
+                    null
+                );
+            } else {
+                Map<String, Object> info = new HashMap<String, Object>() {
+                    {
+                        put("dismiss", "1");
+                        put("currentTime", "0");
+                    }
+                };
+                NotificationCenter.defaultCenter().postNotification("playerFullscreenDismiss", info);
+                ret.put("message", "initPlayer command failed: Video file not found");
+                call.resolve(ret);
+                return;
+            }
         }
     }
+
     private Boolean isInRate(Float arr[], Float rate) {
         Boolean ret = false;
         for (Float el : arr) {
@@ -1133,6 +1129,47 @@ public class CapacitorVideoPlayerPlugin extends Plugin {
                     }
                 }
             );
+        NotificationCenter
+            .defaultCenter()
+            .addMethodForNotification(
+                "playerTracksChanged",
+                new MyRunnable() {
+                    @Override
+                    public void run() {
+                        JSObject data = new JSObject();
+                        Map<String, Object> info = this.getInfo();
+
+                        data.put("fromPlayerId", info.get("fromPlayerId"));
+
+                        if (info.containsKey("audioTrack")) {
+                            JSObject audioTrack = new JSObject();
+                            Map<String, Object> audioInfo = (Map<String, Object>) info.get("audioTrack");
+                            audioTrack.put("id", audioInfo.get("id"));
+                            audioTrack.put("language", audioInfo.get("language"));
+                            audioTrack.put("label", audioInfo.get("label"));
+                            audioTrack.put("codecs", audioInfo.get("codecs"));
+                            audioTrack.put("bitrate", audioInfo.get("bitrate"));
+                            audioTrack.put("channelCount", audioInfo.get("channelCount"));
+                            audioTrack.put("sampleRate", audioInfo.get("sampleRate"));
+                            data.put("audioTrack", audioTrack);
+                        }
+
+                        if (info.containsKey("subtitleTrack")) {
+                            JSObject subtitleTrack = new JSObject();
+                            Map<String, Object> subtitleInfo = (Map<String, Object>) info.get("subtitleTrack");
+                            subtitleTrack.put("id", subtitleInfo.get("id"));
+                            subtitleTrack.put("language", subtitleInfo.get("language"));
+                            subtitleTrack.put("label", subtitleInfo.get("label"));
+                            subtitleTrack.put("codecs", subtitleInfo.get("codecs"));
+                            subtitleTrack.put("containerMimeType", subtitleInfo.get("containerMimeType"));
+                            subtitleTrack.put("sampleMimeType", subtitleInfo.get("sampleMimeType"));
+                            data.put("subtitleTrack", subtitleTrack);
+                        }
+
+                        notifyListeners("jeepCapVideoPlayerTracksChanged", data);
+                    }
+                }
+            );
     }
 
     private void createFullScreenFragment(
@@ -1146,7 +1183,7 @@ public class CapacitorVideoPlayerPlugin extends Plugin {
         Boolean showControls,
         String displayMode,
         String subTitle,
-        String language,
+        String preferredLanguage,
         JSObject subTitleOptions,
         JSObject headers,
         String title,
@@ -1161,6 +1198,12 @@ public class CapacitorVideoPlayerPlugin extends Plugin {
     ) {
         Log.v(TAG, "§§§§ createFullScreenFragment chromecast: " + chromecast);
 
+        // Get track selection parameters from options
+        String subtitleTrackId = call.getString("subtitleTrackId");
+        String subtitleLocale = call.getString("subtitleLocale");
+        String audioTrackId = call.getString("audioTrackId");
+        String audioLocale = call.getString("audioLocale");
+
         fsFragment =
             implementation.createFullScreenFragment(
                 videoPath,
@@ -1172,7 +1215,7 @@ public class CapacitorVideoPlayerPlugin extends Plugin {
                 showControls,
                 displayMode,
                 subTitle,
-                language,
+                preferredLanguage,
                 subTitleOptions,
                 headers,
                 title,
@@ -1185,6 +1228,13 @@ public class CapacitorVideoPlayerPlugin extends Plugin {
                 isInternal,
                 videoId
             );
+
+        // Set track selection parameters
+        fsFragment.setSubtitleTrackId(subtitleTrackId);
+        fsFragment.setSubtitleLocale(subtitleLocale);
+        fsFragment.setAudioTrackId(audioTrackId);
+        fsFragment.setAudioLocale(audioLocale);
+
         bridge
             .getActivity()
             .runOnUiThread(

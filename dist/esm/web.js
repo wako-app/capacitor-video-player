@@ -565,8 +565,7 @@ export class CapacitorVideoPlayerWeb extends WebPlugin {
             : null;
         if (videoURL === null)
             return Promise.resolve(false);
-        this.videoContainer =
-            await this._getContainerElement(playerId, componentTag);
+        this.videoContainer = await this._getContainerElement(playerId, componentTag);
         if (this.videoContainer === null)
             return Promise.resolve({
                 method: 'initPlayer',
@@ -645,6 +644,9 @@ export class CapacitorVideoPlayerWeb extends WebPlugin {
     handlePlayerReady(data) {
         this.notifyListeners('jeepCapVideoPlayerReady', data);
     }
+    handlePlayerTracksChanged(data) {
+        this.notifyListeners('jeepCapVideoPlayerTracksChanged', data);
+    }
     addListeners() {
         document.addEventListener('videoPlayerPlay', (ev) => {
             this.handlePlayerPlay(ev.detail);
@@ -660,6 +662,9 @@ export class CapacitorVideoPlayerWeb extends WebPlugin {
         }, false);
         document.addEventListener('videoPlayerExit', () => {
             this.handlePlayerExit();
+        }, false);
+        document.addEventListener('videoPlayerTracksChanged', (ev) => {
+            this.handlePlayerTracksChanged(ev.detail);
         }, false);
     }
     removeListeners() {
@@ -677,6 +682,9 @@ export class CapacitorVideoPlayerWeb extends WebPlugin {
         }, false);
         document.removeEventListener('videoPlayerExit', () => {
             this.handlePlayerExit();
+        }, false);
+        document.removeEventListener('videoPlayerTracksChanged', (ev) => {
+            this.handlePlayerTracksChanged(ev.detail);
         }, false);
     }
 }
