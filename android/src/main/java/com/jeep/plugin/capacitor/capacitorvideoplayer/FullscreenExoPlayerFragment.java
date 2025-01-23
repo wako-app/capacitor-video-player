@@ -230,7 +230,7 @@ public class FullscreenExoPlayerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         context = container.getContext();
         packageManager = context.getPackageManager();
-        view = inflater.inflate(R.layout.fragment_fs_exoplayer, container, false);
+        view = inflater.inflate(isTV ? R.layout.fragment_fs_exoplayer_tv : R.layout.fragment_fs_exoplayer, container, false);
         constLayout = view.findViewById(R.id.fsExoPlayer);
         linearLayout = view.findViewById(R.id.linearLayout);
         playerView = view.findViewById(R.id.videoViewId);
@@ -403,25 +403,6 @@ public class FullscreenExoPlayerFragment extends Fragment {
                     for (Tracks.Group trackGroup : tracks.getGroups()) {
                         if (trackGroup.isSelected() && trackGroup.getType() == C.TRACK_TYPE_AUDIO) {
                             currentAudioTrack = trackGroup.getMediaTrackGroup();
-                            Format format = currentAudioTrack.getFormat(0);
-                            Log.d(
-                                TAG,
-                                "Piste audio actuelle: " +
-                                "\n - language: " +
-                                format.language +
-                                "\n - label: " +
-                                format.label +
-                                "\n - id: " +
-                                format.id +
-                                "\n - codecs: " +
-                                format.codecs +
-                                "\n - bitrate: " +
-                                format.bitrate +
-                                "\n - channel count: " +
-                                format.channelCount +
-                                "\n - sample rate: " +
-                                format.sampleRate
-                            );
                             break;
                         }
                     }
@@ -431,23 +412,6 @@ public class FullscreenExoPlayerFragment extends Fragment {
                     for (Tracks.Group trackGroup : tracks.getGroups()) {
                         if (trackGroup.isSelected() && trackGroup.getType() == C.TRACK_TYPE_TEXT) {
                             currentSubtitleTrack = trackGroup.getMediaTrackGroup();
-                            Format format = currentSubtitleTrack.getFormat(0);
-                            Log.d(
-                                TAG,
-                                "Sous-titres actuels: " +
-                                "\n - language: " +
-                                format.language +
-                                "\n - label: " +
-                                format.label +
-                                "\n - id: " +
-                                format.id +
-                                "\n - codecs: " +
-                                format.codecs +
-                                "\n - container mime type: " +
-                                format.containerMimeType +
-                                "\n - sample mime type: " +
-                                format.sampleMimeType
-                            );
                             break;
                         }
                     }

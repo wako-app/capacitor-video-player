@@ -1,6 +1,10 @@
 package com.jeep.plugin.capacitor.capacitorvideoplayer;
 
 import android.content.Context;
+
+import androidx.annotation.OptIn;
+import androidx.media3.common.util.UnstableApi;
+
 import com.getcapacitor.JSObject;
 import com.jeep.plugin.capacitor.capacitorvideoplayer.PickerVideo.PickerVideoFragment;
 
@@ -12,6 +16,7 @@ public class CapacitorVideoPlayer {
         return value;
     }
 
+    @OptIn(markerClass = UnstableApi.class)
     public FullscreenExoPlayerFragment createFullScreenFragment(
         String videoPath,
         Float videoRate,

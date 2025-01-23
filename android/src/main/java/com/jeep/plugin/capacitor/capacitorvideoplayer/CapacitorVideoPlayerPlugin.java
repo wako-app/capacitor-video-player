@@ -1,18 +1,15 @@
 package com.jeep.plugin.capacitor.capacitorvideoplayer;
 
 import android.Manifest;
-import android.app.Activity;
-import android.app.UiModeManager;
 import android.content.Context;
-import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Toast;
-import androidx.fragment.app.Fragment;
-import com.getcapacitor.Bridge;
+import androidx.media3.common.util.UnstableApi;
+
 import com.getcapacitor.JSObject;
 import com.getcapacitor.PermissionState;
 import com.getcapacitor.Plugin;
@@ -29,7 +26,7 @@ import com.jeep.plugin.capacitor.capacitorvideoplayer.Utilities.FragmentUtils;
 import java.util.HashMap;
 import java.util.Map;
 
-@CapacitorPlugin(
+@UnstableApi @CapacitorPlugin(
     name = "CapacitorVideoPlayer",
     permissions = {
         @Permission(alias = "mediaVideo", strings = { Manifest.permission.READ_MEDIA_VIDEO }),
@@ -891,12 +888,20 @@ public class CapacitorVideoPlayerPlugin extends Plugin {
     }
 
     public boolean isDeviceTV(Context context) {
-        //Since Android TV is only API 21+ that is the only time we will compare configurations
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            UiModeManager uiManager = (UiModeManager) context.getSystemService(Context.UI_MODE_SERVICE);
-            return uiManager != null && uiManager.getCurrentModeType() == Configuration.UI_MODE_TYPE_TELEVISION;
+        try {
+            boolean isTelevision = context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_LEANBACK);
+
+            if (isTelevision) {
+                Log.d(TAG, "Running on a TV Device");
+            } else {
+                Log.d(TAG, "Running on a non-TV Device");
+            }
+
+            return isTelevision;
+        } catch (Exception e) {
+            Log.e(TAG, "Error checking if device is TV", e);
+            return false;
         }
-        return false;
     }
 
     private void _initPlayer(PluginCall call) {
@@ -907,7 +912,7 @@ public class CapacitorVideoPlayerPlugin extends Plugin {
             // get the videoPath
             videoPath = filesUtils.getFilePath(url);
             // get the subTitlePath if any
-            if (subtitle != null && subtitle.length() > 0) {
+            if (subtitle != null && !subtitle.isEmpty()) {
                 subTitlePath = filesUtils.getFilePath(subtitle);
             } else {
                 subTitlePath = null;
