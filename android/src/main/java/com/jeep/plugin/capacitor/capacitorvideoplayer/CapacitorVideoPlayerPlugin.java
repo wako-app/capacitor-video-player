@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 import androidx.media3.common.util.UnstableApi;
-
 import com.getcapacitor.JSObject;
 import com.getcapacitor.PermissionState;
 import com.getcapacitor.Plugin;
@@ -26,7 +25,7 @@ import com.jeep.plugin.capacitor.capacitorvideoplayer.Utilities.FragmentUtils;
 import java.util.HashMap;
 import java.util.Map;
 
-@UnstableApi @CapacitorPlugin(
+@CapacitorPlugin(
     name = "CapacitorVideoPlayer",
     permissions = {
         @Permission(alias = "mediaVideo", strings = { Manifest.permission.READ_MEDIA_VIDEO }),
